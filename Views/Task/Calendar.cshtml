@@ -1,0 +1,73 @@
+﻿@model IEnumerable<DoMate_Project_by_Priya.Models.TaskItem>
+<!-- CALENDAR + REMINDER SECTION -->
+<div class="card p-3 mt-4 shadow">
+    <h4>📅 Calendar & Reminder</h4>
+
+    <!-- Date Picker -->
+    <div class="mb-3">
+        <label>Select Date:</label>
+        <input type="date" id="taskDate" class="form-control" />
+    </div>
+
+    <!-- Time Picker -->
+    <div class="mb-3">
+        <label>Select Time:</label>
+        <input type="time" id="taskTime" class="form-control" />
+    </div>
+
+    <!-- Reminder Text -->
+    <div class="mb-3">
+        <label>Reminder:</label>
+        <input type="text" id="taskText" class="form-control" placeholder="Enter task..." />
+    </div>
+
+    <!-- Button -->
+    <button onclick="setReminder()" class="btn btn-primary">⏰ Set Reminder</button>
+
+    <!-- Output -->
+    <p id="reminderMsg" class="mt-3 text-success"></p>
+</div>
+
+<!-- SOUND -->
+<audio id="alarmSound">
+    <source src="https://www.soundjay.com/buttons/sounds/beep-07.mp3" type="audio/mpeg">
+</audio>
+
+<!-- SCRIPT -->
+<script>
+    function setReminder() {
+        let date = document.getElementById("taskDate").value;
+        let time = document.getElementById("taskTime").value;
+        let text = document.getElementById("taskText").value;
+
+        if (!date || !time || !text) {
+            alert("⚠️ Please fill all fields");
+            return;
+        }
+
+        let reminderDateTime = new Date(date + "T" + time);
+
+        let now = new Date();
+        let diff = reminderDateTime - now;
+
+        if (diff <= 0) {
+            alert("❌ Please select future time");
+            return;
+        }
+
+        document.getElementById("reminderMsg").innerText =
+            "✅ Reminder set for " + reminderDateTime;
+
+        setTimeout(function () {
+            document.getElementById("alarmSound").play();
+            alert("🔔 Reminder: " + text);
+        }, diff);
+    }
+</script>
+<script>
+    let lang = localStorage.getItem("lang") || "en";
+
+    function t(en, hi) {
+        return lang === "hi" ? hi : en;
+    }
+</script>

@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoMate</title>
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI';
+            transition: 0.3s;
+        }
+
+        /* Light Theme */
+        body.light {
+            background: linear-gradient(135deg, #007bff, #00c6ff);
+            color: white;
+        }
+
+        /* Dark Theme */
+        body.dark {
+            background: #121212;
+            color: white;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .toggle {
+            cursor: pointer;
+        }
+
+       @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile */
+        @@media(max-width:768px){
+            .container { padding:10px; }
+        }
+    </style>
+</head>
+
+<body class="light">
+
+<div class="navbar">
+    <h3>DoMate</h3>
+
+    <div>
+        🌐 <select onchange="changeLang(this.value)">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+        </select>
+
+        <span class="toggle" onclick="toggleMode()">🌙</span>
+    </div>
+</div>
+
+<div class="container">
+    @RenderBody()
+</div>
+
+<div class="container">
+    @RenderBody()
+</div>
+
+<div style="position: fixed; bottom: 0; width: 100%; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.1); backdrop-filter: blur(5px);">
+    
+    <h4 style="margin: 0; font-size: 18px;">
+        <i class="fa-solid fa-circle-user"></i> @(Context.Session.GetString("user") ?? "Priya Singh")
+    </h4>
+
+    <a asp-controller="Account" asp-action="Logout" class="btn" style="background: rgba(255, 0, 0, 0.6); color: white; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s;">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // TempData se message lena
+        var msg = '@TempData["Notification"]';
+        var type = '@TempData["Type"]';
+
+        if (msg !== "") {
+            Swal.fire({
+                title: 'DoMate Notification',
+                text: msg,
+                icon: type, // 'success', 'error', 'info', 'warning'
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                background: document.body.classList.contains('dark') ? '#333' : '#fff',
+                color: document.body.classList.contains('dark') ? '#fff' : '#000'
+            });
+        }
+    });
+</script>
+
+<script>
+function toggleMode(){
+    document.body.classList.toggle("dark");
+}
+
+function changeLang(lang){
+    localStorage.setItem("lang", lang);
+    location.reload();
+}
+</script>
+<script>
+let lang = localStorage.getItem("lang") || "en";
+
+function t(en, hi){
+    return lang === "hi" ? hi : en;
+}
+</script>
+
+
+</body>
+</html>

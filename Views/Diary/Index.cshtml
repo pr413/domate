@@ -1,0 +1,13 @@
+﻿@model List<DoMate_Project_by_Priya.Models.Diary>
+<form method="post" action="/Diary/Create">
+    <textarea name="Content" placeholder="Write your thoughts..." rows="5"></textarea>
+    <button type="submit">Save</button>
+</form>
+
+@foreach (var d in Model)
+{
+    <div>
+        <p>@d.Content</p>
+        <small>@d.Date</small>
+    </div>
+}

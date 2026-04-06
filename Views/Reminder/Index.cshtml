@@ -1,0 +1,90 @@
+﻿@model IEnumerable<DoMate_Project_by_Priya.Models.Reminder>
+
+<audio id="alarmSound" src="/sounds/alarm.mp3" preload="auto"></audio>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between">
+        <h2>⏰ My Reminders</h2>
+        <div>
+            <button class="btn btn-secondary" onclick="playTest()">Test Sound</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reminderModal">Set New Reminder</button>
+        </div>
+    </div>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>Title (Reason)</th>
+                <th>Date & Time</th>
+                <th>Alarm</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="reminder-row" data-title="@item.Title" data-time="@item.ReminderTime.ToString("yyyy-MM-ddTHH:mm")" data-alarm="@item.EnableAlarm.ToString()">
+                    <td>@item.Title</td>
+                    <td>@item.ReminderTime.ToString("dd-MMM-yyyy hh:mm tt")</td>
+                    <td>@(item.EnableAlarm ? "✅ On" : "❌ Off")</td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="reminderModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Reminder" asp-action="Create" method="post">
+                <div class="modal-header"><h5>Add New Reminder</h5></div>
+                <div class="modal-body">
+                    <label>What is it for?</label>
+                    <input type="text" name="Title" class="form-control mb-2" required />
+                    
+                    <label>When?</label>
+                    <input type="datetime-local" name="ReminderTime" class="form-control mb-2" required />
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="EnableAlarm" value="true">
+                        <label class="form-check-label">Enable Alarm Sound?</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function playTest() {
+        document.getElementById("alarmSound").play();
+    }
+
+    // Alarm Checker: Har 30 second mein check karega
+    setInterval(function() {
+        var now = new Date();
+        // Browser time format match karne ke liye
+        var currentTime = now.getFullYear() + "-" +
+            ("0" + (now.getMonth() + 1)).slice(-2) + "-" +
+            ("0" + now.getDate()).slice(-2) + "T" +
+            ("0" + now.getHours()).slice(-2) + ":" +
+            ("0" + now.getMinutes()).slice(-2);
+
+        document.querySelectorAll(".reminder-row").forEach(row => {
+            var remTime = row.getAttribute("data-time");
+            var remTitle = row.getAttribute("data-title");
+            var isAlarmOn = row.getAttribute("data-alarm");
+
+            if (remTime === currentTime && isAlarmOn === "True") {
+                document.getElementById("alarmSound").play();
+                alert("ALARM: " + remTitle);
+            }
+        });
+    }, 30000);
+</script>

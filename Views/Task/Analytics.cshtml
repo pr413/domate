@@ -1,0 +1,45 @@
+﻿@model List<DoMate_Project_by_Priya.Models.TaskItem>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <h2><i class="fa fa-chart-pie"></i> Analytics</h2>
+
+    <canvas id="chart"></canvas>
+</div>
+
+<div class="card">
+    <h3>🗑️ Recycle Bin</h3>
+
+    @foreach (var t in Model.Where(x => x.IsDeleted))
+    {
+        <p>
+            @t.Title
+            <a href="/Task/Restore/@t.Id">♻</a>
+            <a href="/Task/DeletePermanent/@t.Id">❌</a>
+        </p>
+    }
+</div>
+
+<div class="card">
+    <a href="/Account/Logout" class="btn">Logout</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    new Chart(document.getElementById("chart"), {
+    type: 'doughnut',
+    data: {
+    labels: ['Done', 'Pending'],
+    datasets: [{ data: [3, 5] }]
+    }
+    });
+</script>
+<script>
+    let lang = localStorage.getItem("lang") || "en";
+
+    function t(en, hi) {
+    return lang === "hi" ? hi : en;
+    }
+</script>

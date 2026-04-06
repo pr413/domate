@@ -1,0 +1,16 @@
+﻿@model List<DoMate_Project_by_Priya.Models.Contact>
+
+<h2>Favorite Contacts</h2>
+
+<form method="post" action="/Contact/Create">
+    <input name="Name" placeholder="Name" required />
+    <input name="Phone" placeholder="Phone" required />
+    <button>Add</button>
+</form>
+
+<hr />
+
+@foreach (var c in Model)
+{
+    <p>@c.Name - @c.Phone</p>
+}

@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2 style="text-align:center;">👋 Welcome to Dashboard</h2>
+
+<!-- 🌟 CARDS -->
+<div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-top:30px;">
+
+    <div class="card">
+        <h3>Total Tasks</h3>
+        <p>@ViewBag.Total</p>
+    </div>
+
+    <div class="card green">
+        <h3>Completed</h3>
+        <p>@ViewBag.Completed</p>
+    </div>
+
+    <div class="card red">
+        <h3>Pending</h3>
+        <p>@ViewBag.Pending</p>
+    </div>
+
+</div>
+
+<!-- 🔗 NAVIGATION -->
+<div style="text-align:center; margin-top:30px;">
+    <a href="/Task/Index">📋 Task</a> |
+    <a href="/Reminder/Index">⏰ Reminder</a> |
+    <a href="/Diary/Index">📖 Diary</a> |
+    <a href="/Contact/Index">📞 Contacts</a> |
+    <a href="/Routine/Index">🗓 Routine</a>
+</div>
+
+<!-- 🎨 STYLE -->
+<style>
+    body {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        font-family: Arial;
+    }
+
+    /* Cards */
+    .card {
+        background: rgba(255,255,255,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        width: 200px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        transition: 0.3s;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+    .green {
+        background: rgba(0,255,0,0.2);
+    }
+
+    .red {
+        background: rgba(255,0,0,0.2);
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-block;
+        margin: 10px;
+        padding: 12px 20px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 10px;
+        text-decoration: none;
+        color: white;
+        transition: 0.3s;
+    }
+
+        .btn:hover {
+            background: rgba(255,255,255,0.4);
+        }
+</style>

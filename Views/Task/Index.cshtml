@@ -1,0 +1,100 @@
+﻿@model List<TaskItem>
+
+<h2>📋 Task Manager</h2>
+
+<!-- 🔍 SEARCH -->
+<input type="text" id="search" placeholder="Search task..."
+       onkeyup="searchTask()" style="padding:10px;width:250px;" />
+
+<br>
+<br>
+
+<!-- ➕ ADD TASK -->
+<form method="post" asp-action="Create">
+    <input name="Title" placeholder="Task" required />
+
+    <select name="Category">
+        <option>Work</option>
+        <option>Study</option>
+        <option>Personal</option>
+    </select>
+
+    <select name="Priority">
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+    </select>
+
+    <button>Add Task</button>
+</form>
+
+<br>
+
+<!-- 📊 TABLE -->
+<table border="1" width="100%" id="taskTable">
+    <thead style="background:#007bff;color:white;">
+        <tr>
+            <th>Task</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var t in Model)
+        {
+            <tr>
+                <td>@t.Title</td>
+                <td>🏷 @t.Category</td>
+                <td>
+                    @if (t.Priority == "High")
+                    {
+                        <span style="color:red;">High</span>
+                    }
+                    else if (t.Priority == "Medium")
+                    {
+                        <span style="color:orange;">Medium</span>
+                    }
+                    else
+                    {
+                        <span style="color:green;">Low</span>
+                    }
+                </td>
+
+                <td>
+                    <input type="checkbox"
+                           onclick="location.href='/Task/Toggle/@t.Id'"
+                    @(t.IsCompleted ? "checked" : "") />
+
+                    @(t.IsCompleted ? "✅ Completed" : "⏳ Pending")
+                </td>
+
+                <td>
+                    <a href="/Task/Delete/@t.Id">🗑 Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- 🔥 SEARCH SCRIPT -->
+<script>
+    function searchTask() {
+        let input = document.getElementById("search").value.toLowerCase();
+        let rows = document.querySelectorAll("#taskTable tbody tr");
+
+        rows.forEach(r => {
+            r.style.display = r.innerText.toLowerCase().includes(input)
+                ? "" : "none";
+        });
+    }
+</script>
+<br />
+
+<div style="text-align:right;">
+    <a href="/Dashboard/Index">
+        <button style="padding:10px 20px;">Next ➡️</button>
+    </a>
+</div>

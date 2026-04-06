@@ -1,0 +1,61 @@
+﻿@model List<DoMate_Project_by_Priya.Models.Routine>
+<h2>⏰ Daily Routine</h2>
+
+<table border="1" width="100%">
+    <tr>
+        <th>Time</th>
+        <th>Task</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var r in Model)
+    {
+        <tr>
+            <td>@r.Time</td>
+            <td>@r.TaskName</td>
+            <td>
+                @(r.IsCompleted ? "✅ Completed" : "❌ Pending")
+            </td>
+            <td>
+                <a href="/Routine/Toggle/@r.Id">✔ Toggle</a>
+            </td>
+        </tr>
+    }
+    <form asp-action="Create" method="post">
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Task</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="time" name="Time" class="form-control" /></td>
+                    <td><input type="text" name="TaskName" class="form-control" placeholder="Add task..." /></td>
+                    <td>
+                        <select name="Status">
+                            <option value="Pending">Pending</option>
+                            <option value="complete">complete</option>
+                        </select>
+                    </td>
+                    <td><button type="submit" class="btn btn-primary">Add</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    
+    <script>
+            setInterval(() => {
+                document.querySelectorAll("tr").forEach(row => {
+                    if (row.innerText.includes("❌")) {
+                        alert("⚠ Pending Task!");
+                    }
+                });
+            }, 60000);
+    </script>
+    <input type="date" />
+</table>
