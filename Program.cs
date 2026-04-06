@@ -14,7 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // 🔷 Session Enable
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // session time
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -28,14 +28,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+// ❗ (Optional) Render pe HTTPS off kar sakte ho
+// app.UseHttpsRedirection();
 
+app.UseStaticFiles();
 app.UseRouting();
 
-// 🔷 Session middleware (IMPORTANT)
 app.UseSession();
-
 app.UseAuthorization();
 
 // 🔷 Default Route
@@ -44,4 +43,12 @@ app.MapControllerRoute(
     pattern: "{controller=Account}/{action=Login}/{id?}"
 );
 
-app.Run();
+// 🔥 DATABASE MIGRATION (CORRECT PLACE)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
+// 🔥 Render port fix
+app.Run("http://0.0.0.0:10000");
